@@ -54,13 +54,15 @@ eco-monitor/
 
 ## Призначення основних каталогів
 
-`app/` містить сторінки, layout і серверні API-маршрути. Саме тут реалізовано основну логіку інтерфейсу та отримання даних.
+`app/` — сторінки та API маршрути Next.js App Router
 
-`data/` зберігає локальні тестові набори даних — 6 станцій у містах України та 180 вимірювань (по 30 на кожну станцію за останній місяць).
+`data/`— серверні API endpoints
 
-`lib/` використовується для повторно застосовуваних функцій, наприклад для розрахунку AQI.
+`lib/`— TypeScript інтерфейси та типи
 
-`types/` містить спільні інтерфейси та enum, які використовуються і на сервері, і на клієнті.
+`types/` — тестові дані для станцій та вимірювань
+
+`components/ ` — перевикористовувані компоненти
 
 ## TypeScript-інтерфейси
 
@@ -164,6 +166,11 @@ export default async function HomePage() {
   // рендеринг сторінки...
 }
 ```
+На головній сторінці відображається список 6 моніторингових станцій з поточними показниками PM2.5, NO2, AQI та рівнем забруднення. Також відображається таблиця поточних вимірювань по всіх станціях.
+<img width="943" height="510" alt="image" src="https://github.com/user-attachments/assets/b8fd5620-1d80-4518-b5f7-e6eb48d3eeb6" />
+
+<img width="974" height="525" alt="image" src="https://github.com/user-attachments/assets/07635815-3887-4a6d-8806-59467b5cb988" />
+
 
 У Next.js 15 параметри динамічного роутингу стали асинхронними:
 
@@ -178,25 +185,41 @@ export default async function StationPage({
   if (!station) notFound();
 }
 ```
+Сторінка відображає поточні показники станції, середні значення за 30 днів, загальну інформацію та таблицю вимірювань.
+
+<img width="974" height="521" alt="image" src="https://github.com/user-attachments/assets/671b8484-115a-4795-8003-f0b94faa3486" />
+
+<img width="974" height="533" alt="image" src="https://github.com/user-attachments/assets/564781b0-5edd-4163-be89-68094d0aa148" />
+
+
 
 ### SSG
 
-Сторінки `app/about/page.tsx` і `app/pollutants/page.tsx` є статичними (`export const revalidate = false`). Довідник забруднювачів містить таблицю з описом 6 забруднювачів з нормами концентрації згідно стандартів ВОЗ.
+Сторінки `app/about/page.tsx` і `app/pollutants/page.tsx` є статичними (`export const revalidate = false`). 
+
+Статична сторінка "Про проєкт" (`app/about/page.tsx`) — SSG:
+
+```typescript
+export const revalidate = false;
+
+export default function AboutPage() {
+  // статичний контент...
+}
+```
+
+<img width="974" height="213" alt="image" src="https://github.com/user-attachments/assets/7b7cdb83-2532-4460-bc33-34eefb898a41" />
+
+Статична сторінка "Довідник забруднювачів" (`app/pollutants/page.tsx`) — SSG:
+Містить таблицю з описом 6 забруднювачів: PM2.5, PM10, NO2, SO2, CO, O3 з нормами концентрації згідно стандартів ВОЗ.
+
+<img width="974" height="411" alt="image" src="https://github.com/user-attachments/assets/48d9424c-a93c-4ccd-a372-6edf8fc1e0db" />
+
 
 ## Тестові дані
 
 Створено 6 моніторингових станцій у `data/stations.ts`:
-
-| ID | Місто | Тип |
-|---|---|---|
-| kyiv-001 | Київ | urban |
-| kharkiv-001 | Харків | urban |
-| odesa-001 | Одеса | urban |
-| lviv-001 | Львів | urban |
-| dnipro-001 | Дніпро | industrial |
-| zaporizhzhia-001 | Запоріжжя | industrial |
-
 У `data/measurements.ts` згенеровано 180 вимірювань — по 30 на кожну станцію. PM2.5 для міських станцій: 8–45 мкг/м³, для промислових: 25–75 мкг/м³.
+
 
 ## API
 
@@ -221,21 +244,40 @@ export async function GET(request: NextRequest) {
 }
 ```
 
+<img width="821" height="987" alt="image" src="https://github.com/user-attachments/assets/44985bed-aa87-4e99-b9bc-0db0212d90d9" />
+
+
 ### GET /api/stations/:id
 
 Повертає деталі станції, останнє вимірювання та середні значення за 30 днів.
+
+<img width="960" height="1518" alt="image" src="https://github.com/user-attachments/assets/62d9d470-5bfd-496d-873b-b6cbc2bae6ca" />
 
 ### GET /api/measurements
 
 Фільтрація за `stationId`, діапазоном дат, пагінація і сортування.
 
+<img width="974" height="1285" alt="image" src="https://github.com/user-attachments/assets/639b972b-302b-419f-884a-8ff6f1a77eb9" />
+
 ### GET /api/current
 
 Поточні показники для всіх активних станцій.
 
+<img width="974" height="1219" alt="image" src="https://github.com/user-attachments/assets/bc483ae3-fd02-4d94-8a60-a6358cce3317" />
+
+
 ## Висновки
 
-У ході лабораторної роботи створено веб-додаток EcoMonitor для моніторингу якості повітря по 6 містах України. Реалізовано SSR для динамічних сторінок, SSG для довідкових, чотири API-маршрути з валідацією та пагінацією, типобезпечні інтерфейси з enum. Строга перевірка типів у `tsconfig.json` дозволяє виявляти помилки ще до запуску застосунку.
+В ході виконання лабораторної роботи було створено веб-додаток для моніторингу якості повітря на Next.js 15 з TypeScript.
+Практично освоєно:
+•	створення Next.js проєкту та налаштування TypeScript з строгою перевіркою типів
+•	розробку TypeScript інтерфейсів та enum для структурованого опису екологічних даних
+•	реалізацію SSR для динамічних сторінок через async компоненти
+•	реалізацію SSG для статичних інформаційних сторінок
+•	динамічний роутинг з параметрами [id] та асинхронні params у Next.js 15
+•	розробку 4 API endpoints з валідацією, фільтрацією, пагінацією та обробкою помилок
+•	генерацію тестових даних для 6 станцій з часовими рядами за 30 днів
+Використання TypeScript значно підвищило надійність коду — всі помилки типів виявлялись на етапі розробки. Система демонструє правильне застосування різних стратегій рендерингу залежно від характеру даних.
 
 ---
 
@@ -245,7 +287,7 @@ export async function GET(request: NextRequest) {
 
 **Мета роботи:** Навчитися інтегрувати картографічні бібліотеки та інструменти візуалізації для створення інтерактивного інтерфейсу відображення екологічних даних.
 
-## Нові залежності
+## Для реалізації карти обрано бібліотеку Leaflet.js разом з обгорткою react-leaflet для зручної інтеграції з React. Встановлення виконано командою
 
 ```bash
 npm install leaflet react-leaflet @types/leaflet
@@ -267,15 +309,19 @@ components/
 
 ### Проблема SSR та її вирішення
 
-Leaflet використовує об'єкт `window`, який не існує на сервері. Компонент карти підключається виключно на клієнті через dynamic import:
+При інтеграції Leaflet у Next.js виникає проблема — бібліотека використовує об'єкт window, який не існує на сервері. Тому компонент карти підключається виключно на клієнті через dynamic import з параметром `ssr`:
 
 ```typescript
+false:
 const Map = dynamic(() => import("@/components/Map"), { ssr: false });
+
 ```
 
-Компонент `components/Map.tsx` позначений директивою `"use client"`.
+Компонент `components/Map.tsx` позначений директивою `"use client"` і не виконується на сервері.
 
-### Компонент карти
+### Компонент карти^
+
+Карта відцентрована на координатах України (49.0, 31.0) з початковим масштабом 6. Як підкладку використано тайли OpenStreetMap.
 
 ```tsx
 <MapContainer center={[49.0, 31.0]} zoom={6}
@@ -300,11 +346,20 @@ const aqiColor = {
 
 Обрана станція виділяється більшим радіусом (16px замість 10px) та чорною обводкою. `Popup` відображає назву, місто, AQI, PM2.5, NO2 та рівень забруднення.
 
+### Спливаючі вікна (Popup)
+
+При кліку на маркер відображається Popup з назвою станції, містом, значеннями AQI, PM2.5, NO2 та рівнем забруднення.
+
+<img width="567" height="475" alt="image" src="https://github.com/user-attachments/assets/ceae0745-4753-4840-8fd3-ca35659e6212" />
+
+<img width="624" height="371" alt="image" src="https://github.com/user-attachments/assets/55511ccc-2d79-4656-88dc-a419760331fb" />
+
+
 ## Частина 2. Графіки (components/Charts.tsx)
 
 ### Лінійний графік
 
-Зміна AQI, PM2.5 та NO2 за останні 14 днів:
+Відображає зміну показників AQI, PM2.5 та NO2 за останні 14 днів. Кожен показник — окрема лінія свого кольору. При наведенні курсора з'являється підказка з точними значеннями.
 
 ```tsx
 <LineChart data={lineData}>
@@ -316,10 +371,12 @@ const aqiColor = {
   <Line dataKey="NO2"   stroke="#185FA5" strokeWidth={2} dot={false} />
 </LineChart>
 ```
+<img width="902" height="337" alt="image" src="https://github.com/user-attachments/assets/310c45d0-2ed6-42e5-9663-d5f5943564d0" />
+
 
 ### Стовпчикова діаграма
 
-Порівняння PM2.5, PM10 та NO2 за останні 7 днів:
+Порівнює показники PM2.5, PM10 та NO2 за останні 7 днів. Кожен день — група з трьох стовпців різного кольору. Компонент Tooltip відображає точні значення при наведенні.
 
 ```tsx
 <BarChart data={barData}>
@@ -329,9 +386,12 @@ const aqiColor = {
 </BarChart>
 ```
 
+<img width="901" height="183" alt="image" src="https://github.com/user-attachments/assets/6ae076be-c607-40b2-a3cb-c2d8e8eadffc" />
+
+
 ### Кругова діаграма
 
-Структура забруднення — частка кожного з 6 забруднювачів:
+Відображає структуру забруднення в поточний момент — частку кожного забруднювача відносно загального. Використовує поточні значення PM2.5, PM10, NO2, SO2, CO, O3.
 
 ```tsx
 <PieChart>
@@ -343,6 +403,9 @@ const aqiColor = {
 </PieChart>
 ```
 
+<img width="907" height="253" alt="image" src="https://github.com/user-attachments/assets/0552f8ea-d270-41f9-969c-7c5780f4aea4" />
+
+
 ## Частина 3. Інтеграція карти та графіків
 
 Сторінка `app/map/page.tsx` — клієнтський компонент (`"use client"`).
@@ -353,8 +416,11 @@ const aqiColor = {
 const [selectedId, setSelectedId] = useState<string | null>(null);
 const [measurements, setMeasurements] = useState<any[]>([]);
 ```
+Змінна `selectedId` зберігає ID обраної станції і передається одночасно в компонент карти (для виділення маркера) та використовується
 
 ### Завантаження даних
+
+При зміні `selectedId` автоматично виконується `fetch` вимірювань обраної станції
 
 ```typescript
 useEffect(() => {
@@ -365,11 +431,47 @@ useEffect(() => {
 }, [selectedId]);
 ```
 
+### Layout сторінки
+
 Layout сторінки розділений на дві колонки через CSS Grid. На мобільних — одна колонка.
+
+```css
+.layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+}
+@media(max-width: 700px) {
+  .layout { grid-template-columns: 1fr; }
+}
+```
+### Список станцій
+
+Під картою розміщено список всіх станцій з кольоровою крапкою (відповідає кольору маркера), назвою, містом та поточним AQI. Клік на елемент списку — те саме що клік на маркер карти.
+
+### Скидання вибору
+
+Реалізовано кнопку "Скинути вибір" яка обнуляє `selectedId` та очищує масив вимірювань
+
+```typescript
+onClick={() => { setSelectedId(null); setMeasurements([]); }}
+```
+
+<img width="1878" height="977" alt="image" src="https://github.com/user-attachments/assets/499fdc46-dcb2-4233-a462-3756fec62b57" />
+
 
 ## Висновки
 
-Реалізовано інтерактивну карту станцій України з `CircleMarker` і кольоровим кодуванням за AQI. Підключено три типи графіків у `components/Charts.tsx`. Карту та графіки зв'язано через `selectedId` у `app/map/page.tsx`. Вирішено проблему SSR для Leaflet через `dynamic import` з `ssr: false`.
+В ході виконання лабораторної роботи проєкт eco-monitor доповнено інтерактивною картою та візуалізацією даних.
+Практично освоєно:
+•	інтеграцію Leaflet.js у Next.js з вирішенням проблеми SSR через dynamic import
+•	створення кастомних маркерів з кольоровим кодуванням за рівнем AQI
+•	реалізацію трьох типів графіків через Recharts — лінійний, стовпчиковий, круговий
+•	синхронізацію компонентів карти і графіків через спільний стан
+•	адаптивний layout з двома колонками через CSS Grid
+•	клієнтське завантаження даних через useEffect і fetch
+Реалізована функціональність дозволяє наочно відстежувати екологічну ситуацію — вибір станції на карті автоматично відображає її графіки із часовою динамікою показників.
+
 
 ---
 
@@ -406,7 +508,8 @@ analytics-log.json          # Файл збереження подій
 
 ## Частина 1. Власна система аналітики
 
-Замість зовнішніх сервісів (Google Analytics) реалізовано власну систему — повний контроль над даними без зовнішніх залежностей.
+Система складається з трьох частин — клієнтська частина відправляє події, серверна частина приймає і зберігає їх, панель аналітики відображає статистику.
+Створено файл `lib/analytics.ts` з використанням глобальної змінної для зберігання подій між запитами:
 
 ### lib/analytics.ts
 
@@ -470,9 +573,31 @@ export default function Analytics() {
 }
 ```
 
+### Збереження даних у файл
+
+Кожна аналітична подія зберігається у файл `analytics-log.json` в корені проєкту через модуль `fs`:
+
+```typescript
+function saveToFile(event: object) {
+  let existing: object[] = [];
+  if (fs.existsSync(LOG_FILE)) {
+    const raw = fs.readFileSync(LOG_FILE, "utf-8");
+    existing = JSON.parse(raw);
+  }
+  existing.push(event);
+  fs.writeFileSync(LOG_FILE, JSON.stringify(existing, null, 2));
+}
+
+```
+
 ### Панель аналітики — app/analytics/page.tsx
 
 Відображає: загальну кількість подій, перегляди кожної сторінки, типи подій та їх кількість, кількість збережених подій у файлі.
+
+<img width="329" height="496" alt="image" src="https://github.com/user-attachments/assets/8b6145cf-2400-4618-8bba-cefde9e3164e" />
+
+<img width="284" height="575" alt="image" src="https://github.com/user-attachments/assets/0fe556bf-acce-4ce1-a998-775de61e7d38" />
+
 
 ## Частина 2. Серверне логування
 
@@ -531,6 +656,9 @@ export function middleware(request: NextRequest) {
 }
 ```
 
+<img width="974" height="398" alt="image" src="https://github.com/user-attachments/assets/cf074a25-ac18-4388-a89c-7f1516e39fdb" />
+
+
 ## Частина 3. Обробка помилок
 
 ### Ієрархія
@@ -545,9 +673,64 @@ GlobalError (app/global-error.tsx)    ← помилки у layout.tsx
 `app/error.tsx` — отримує `error` та `reset` як пропси.  
 `app/global-error.tsx` — повертає повноцінний HTML без залежності від layout.
 
+<img width="778" height="262" alt="image" src="https://github.com/user-attachments/assets/60d18bdd-e94a-413a-971b-f5160dc9f408" />
+
+### Error Boundary (app/error.tsx)
+
+Клієнтський компонент який перехоплює помилки React і відображає зрозуміле повідомлення. При виникненні помилки автоматично відправляє подію в систему аналітики:
+
+```typescript
+export default function Error({ error, reset }) {
+  useEffect(() => {
+    fetch("/api/analytics", {
+      method: "POST",
+      body: JSON.stringify({
+        event: "error",
+        message: error.message,
+      }),
+    });
+  }, [error]);
+
+
+}
+```
+
+```css
+  return (
+    <div>
+      <div style={{ fontSize: 64, color: "#cc5500" }}>500</div>
+      <h1>Щось пішло не так</h1>
+      <button onClick={reset}>Спробувати знову</button>
+    </div>
+  );
+}
+```
+### Обробка помилок в API
+
+У всіх API `endpoints` реалізовано `try/catch` з поверненням правильного HTTP статус коду
+
+```typescript
+} catch (err) {
+  logger.error({ error: err }, "Помилка");
+  return NextResponse.json(
+    { error: "Internal Server Error", message: "Помилка сервера" },
+    { status: 500 }
+  );
+}
+
+```
 ## Висновки
 
-Реалізовано власну систему аналітики з глобальним сховищем подій, збереженням у `analytics-log.json` та панеллю статистики. Підключено pino-логер з JSON-виводом у продакшні та `pino-pretty` у розробці. Middleware логує всі API-запити крім аналітики. Побудовано триступеневу ієрархію обробки помилок з кастомними сторінками 404 і 500.
+В ході виконання лабораторної роботи проєкт eco-monitor доповнено системами логування, аналітики та обробки помилок.
+Практично освоєно:
+•	структуроване логування через pino з різними рівнями — info, warn, error
+•	автоматичне логування API запитів через Next.js Middleware
+•	реалізацію власної системи аналітики без зовнішніх залежностей
+•	збереження аналітичних подій у файл через модуль fs
+•	відстеження переглядів сторінок через usePathname і useEffect
+•	реалізацію Error Boundary для перехоплення помилок React компонентів
+•	кастомні сторінки 404 і 500 через файли not-found.tsx і error.tsx
+Реалізована система логування дозволяє відстежувати роботу додатку в реальному часі, а аналітика — розуміти поведінку користувачів без передачі даних зовнішнім сервісам
 
 ---
 
@@ -560,6 +743,21 @@ GlobalError (app/global-error.tsx)    ← помилки у layout.tsx
 ## Частина 1. Аудит продуктивності
 
 Аудит виконано інструментом Lighthouse у режимі інкогніто для двох сторінок: головної (`/`) та сторінки карти (`/map`).
+
+### Показники до оптимізації
+
+Головна сторінка:
+
+<img width="477" height="393" alt="image" src="https://github.com/user-attachments/assets/084bb057-404c-49b7-affb-f5821c76722e" />
+
+<img width="606" height="426" alt="image" src="https://github.com/user-attachments/assets/f046ea5e-7c35-49aa-b269-1b29d18cdeea" />
+
+Сторінка станції:
+
+<img width="553" height="418" alt="image" src="https://github.com/user-attachments/assets/1341a5f4-f5e3-4d93-8613-f57367d8c8ae" />
+
+<img width="612" height="402" alt="image" src="https://github.com/user-attachments/assets/fb09fdcf-b7e0-4452-bcb5-9b97b7191bcc" />
+
 
 ### Основні проблеми, виявлені Lighthouse
 
@@ -651,6 +849,21 @@ const nextConfig: NextConfig = {
 
 export default nextConfig;
 ```
+## Показники після оптимізації
+
+Головна сторінка:
+
+<img width="629" height="484" alt="image" src="https://github.com/user-attachments/assets/d881cd4a-28fb-4511-8765-265ece2b1a52" />
+
+<img width="593" height="554" alt="image" src="https://github.com/user-attachments/assets/72735a5b-98e4-4355-957d-a3ea3136e863" />
+
+
+Сторінка станції:
+
+<img width="618" height="794" alt="image" src="https://github.com/user-attachments/assets/fef7ec5c-00cf-4547-ad24-b69791cebe32" />б
+
+<img width="607" height="558" alt="image" src="https://github.com/user-attachments/assets/3f31f447-6ac3-49d8-8531-4becbdf399dd" />
+
 
 ## Частина 3. CI/CD — .github/workflows/ci.yml
 
@@ -686,7 +899,7 @@ jobs:
 ## Частина 4. Деплой на Vercel
 
 - **GitHub:** https://github.com/anastasiakvk/eco-monitor
-- **Production:** https://eco-monitor-iota.vercel.app
+- **Production:** https://eco-monitor-iota.vercel.app](https://eco-monitor-jet.vercel.app/
 - **Node.js:** 20.x
 - Production deploy — при push до `main`
 - Preview deploy — для кожного pull request
