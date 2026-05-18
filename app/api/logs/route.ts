@@ -9,6 +9,6 @@ export function addLog(entry: object) {
 }
 
 export async function GET() {
-  logger.info("Запит переліку логів");
+  logger.info({ message: "Запит переліку логів" });
   return NextResponse.json({ data: logBuffer, total: logBuffer.length });
 }
