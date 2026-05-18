@@ -851,7 +851,8 @@ export default nextConfig;
 
 Головна сторінка:
 
-<img width="629" height="484" alt="image" src="https://github.com/user-attachments/assets/d881cd4a-28fb-4511-8765-265ece2b1a52" />
+<img width="546" height="436" alt="image" src="https://github.com/user-attachments/assets/81b77d1a-6cf7-4dd0-8a64-a5f6b6135b07" />
+
 
 <img width="593" height="554" alt="image" src="https://github.com/user-attachments/assets/72735a5b-98e4-4355-957d-a3ea3136e863" />
 
