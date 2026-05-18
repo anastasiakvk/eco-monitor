@@ -746,9 +746,9 @@ export default function Error({ error, reset }) {
 
 Головна сторінка:
 
-<img width="617" height="804" alt="image" src="https://github.com/user-attachments/assets/32111a31-546a-474c-8dca-4d2db52acc3a" />
+<img width="689" height="519" alt="image" src="https://github.com/user-attachments/assets/91decc59-3e18-433a-bc47-395d12947232" />
 
-<img width="606" height="426" alt="image" src="https://github.com/user-attachments/assets/f046ea5e-7c35-49aa-b269-1b29d18cdeea" />
+<img width="607" height="395" alt="image" src="https://github.com/user-attachments/assets/9ba3f706-9467-4a64-9e1a-a583949f230c" />
 
 Сторінка станції:
 
@@ -851,17 +851,17 @@ export default nextConfig;
 
 Головна сторінка:
 
-<img width="546" height="436" alt="image" src="https://github.com/user-attachments/assets/81b77d1a-6cf7-4dd0-8a64-a5f6b6135b07" />
+<img width="964" height="1256" alt="image" src="https://github.com/user-attachments/assets/24cc7ba8-41e4-48e9-b442-8aaf38be3296" />
 
-
-<img width="593" height="554" alt="image" src="https://github.com/user-attachments/assets/72735a5b-98e4-4355-957d-a3ea3136e863" />
+<img width="927" height="866" alt="image" src="https://github.com/user-attachments/assets/f965417e-328a-4121-9734-f9da6cd07163" />
 
 
 Сторінка станції:
 
-<img width="618" height="794" alt="image" src="https://github.com/user-attachments/assets/fef7ec5c-00cf-4547-ad24-b69791cebe32" />б
+<img width="959" height="1152" alt="image" src="https://github.com/user-attachments/assets/b38795e8-3f02-4d6f-8d39-f538b334e3d1" />
 
-<img width="607" height="558" alt="image" src="https://github.com/user-attachments/assets/3f31f447-6ac3-49d8-8531-4becbdf399dd" />
+<img width="970" height="711" alt="image" src="https://github.com/user-attachments/assets/d6f116a1-c828-4bb8-94ac-bc8fee776084" />
+
 
 
 ## Частина 3. CI/CD — .github/workflows/ci.yml
