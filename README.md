@@ -746,7 +746,7 @@ export default function Error({ error, reset }) {
 
 Головна сторінка:
 
-<img width="477" height="393" alt="image" src="https://github.com/user-attachments/assets/084bb057-404c-49b7-affb-f5821c76722e" />
+<img width="617" height="804" alt="image" src="https://github.com/user-attachments/assets/32111a31-546a-474c-8dca-4d2db52acc3a" />
 
 <img width="606" height="426" alt="image" src="https://github.com/user-attachments/assets/f046ea5e-7c35-49aa-b269-1b29d18cdeea" />
 
