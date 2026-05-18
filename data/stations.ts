@@ -1,0 +1,58 @@
+import { MonitoringStation, StationType } from "@/types/air-quality";
+
+export const stations: MonitoringStation[] = [
+  {
+    id: "kyiv-001",
+    name: "Станція Шевченківська",
+    city: "Київ",
+    region: "Київська область",
+    coordinates: { lat: 50.4501, lng: 30.5234 },
+    type: StationType.Urban,
+    isActive: true,
+  },
+  {
+    id: "kharkiv-001",
+    name: "Станція Центральна",
+    city: "Харків",
+    region: "Харківська область",
+    coordinates: { lat: 49.9935, lng: 36.2304 },
+    type: StationType.Urban,
+    isActive: true,
+  },
+  {
+    id: "odesa-001",
+    name: "Станція Приморська",
+    city: "Одеса",
+    region: "Одеська область",
+    coordinates: { lat: 46.4825, lng: 30.7233 },
+    type: StationType.Urban,
+    isActive: true,
+  },
+  {
+    id: "lviv-001",
+    name: "Станція Личаківська",
+    city: "Львів",
+    region: "Львівська область",
+    coordinates: { lat: 49.8397, lng: 24.0297 },
+    type: StationType.Urban,
+    isActive: true,
+  },
+  {
+    id: "dnipro-001",
+    name: "Станція Промислова",
+    city: "Дніпро",
+    region: "Дніпропетровська область",
+    coordinates: { lat: 48.4647, lng: 35.0462 },
+    type: StationType.Industrial,
+    isActive: true,
+  },
+  {
+    id: "zaporizhzhia-001",
+    name: "Станція Заводська",
+    city: "Запоріжжя",
+    region: "Запорізька область",
+    coordinates: { lat: 47.8388, lng: 35.1396 },
+    type: StationType.Industrial,
+    isActive: true,
+  },
+];

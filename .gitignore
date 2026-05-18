@@ -1,0 +1,15 @@
+# Dependencies
+node_modules/
+
+# Next.js
+.next/
+out/
+
+# Logs — не публікуємо логи
+analytics-log.json
+*.log
+
+# Environment variables
+.env
+.env.local
+.env.production
